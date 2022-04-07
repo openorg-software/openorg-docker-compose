@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - ./nginx/html:/usr/share/nginx/html
+      - ./nginx/conf:/etc/nginx/conf.d/
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
+    networks:
+      - proxy
+
+  nginx-proxy-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt-proxy
+    volumes:
+      - ./acme.sh/:/etc/acme.sh
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - ./nginx/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - "DEFAULT_EMAIL=certs@openorg.software"
+      - "NGINX_PROXY_CONTAINER=nginx-proxy"
+    restart: always
+
+networks:
+  proxy:
+    external: true

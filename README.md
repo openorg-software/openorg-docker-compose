@@ -1,2 +1,6 @@
 # openorg-docker-compose
-Repository used to set-up the whole OpenOrg stack
+
+Docker-compose files used by OpenOrg
+
+## Deployment Overview
+![Overview](.drawings/overview.svg)
