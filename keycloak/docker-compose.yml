@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  db:
+      image: postgres:13
+      volumes:
+        - ./data/postgres:/var/lib/postgresql/data
+      env_file:
+        - .env
+      environment:
+        - POSTGRES_DB=keycloak
+        - POSTGRES_USER=keycloak
+      networks:
+        - keycloak
+      restart: unless-stopped
+  server:
+      image: jboss/keycloak
+      volumes:
+        - ./themes/stf_theme:/opt/jboss/keycloak/themes/stf_theme
+        - ./data/keycloak/configuration/:/opt/jboss/keycloak/standalone/configuration
+      env_file:
+        - .env
+      restart: unless-stopped
+      environment:
+        - PROXY_ADDRESS_FORWARDING=true
+        - VIRTUAL_HOST=sso.openorg.software
+        - VIRTUAL_PORT=8080
+        - LETSENCRYPT_HOST=sso.openorg.software
+        - DB_VENDOR=POSTGRES
+        - DB_ADDR=db
+        - DB_DATABASE=keycloak
+        - DB_USER=keycloak
+        - DB_SCHEMA=public
+        - KEYCLOAK_USER=admin
+      depends_on:
+        - db
+      networks:
+        - proxy
+        - keycloak
+
+networks:
+  proxy:
+    external: true
+  keycloak:
+    external: false

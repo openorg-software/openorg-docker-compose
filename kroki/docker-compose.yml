@@ -1,0 +1,15 @@
+version: "3"
+services:
+  kroki:
+    image: yuzutech/kroki
+    container_name: kroki
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    networks:
+      - kroki
+      - appwrite_runtimes
+
+networks:
+  appwrite_runtimes:
+    external: true
