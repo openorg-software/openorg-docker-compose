@@ -1,0 +1,22 @@
+## Start of configuration add by letsencrypt container
+location ^~ /.well-known/acme-challenge/ {
+    auth_basic off;
+    auth_request off;
+    allow all;
+    root /usr/share/nginx/html;
+    try_files $uri =404;
+    break;
+}
+## End of configuration add by letsencrypt container
+client_max_body_size 1G;
+
+error_page 500 502 503 504 /50x_custom.html;
+location = /50x_custom.html {
+    root /usr/share/nginx/html;
+    internal;
+}
+
+# hide public user page
+location /u {
+  return      301 https://cloud.openorg.software/settings/user;
+}
