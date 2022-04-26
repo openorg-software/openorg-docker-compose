@@ -1,8 +1,9 @@
 version: '3'
 
 services:
-  db:
+  keycloak-postgres:
       image: postgres:13
+      container_name: keycloak-postgres
       volumes:
         - ./data/postgres:/var/lib/postgresql/data
       env_file:
@@ -13,27 +14,28 @@ services:
       networks:
         - keycloak
       restart: unless-stopped
-  server:
-      image: jboss/keycloak
-      volumes:
-        - ./themes/stf_theme:/opt/jboss/keycloak/themes/stf_theme
-        - ./data/keycloak/configuration/:/opt/jboss/keycloak/standalone/configuration
+  keycloak-server:
+      image: quay.io/keycloak/keycloak:latest
+      container_name: keycloak-server
+      entrypoint:
+        - /opt/keycloak/bin/kc.sh
+        - start
+        - --auto-build
+        - --proxy=edge
       env_file:
         - .env
       restart: unless-stopped
       environment:
-        - PROXY_ADDRESS_FORWARDING=true
         - VIRTUAL_HOST=sso.openorg.software
         - VIRTUAL_PORT=8080
         - LETSENCRYPT_HOST=sso.openorg.software
-        - DB_VENDOR=POSTGRES
-        - DB_ADDR=db
-        - DB_DATABASE=keycloak
-        - DB_USER=keycloak
-        - DB_SCHEMA=public
-        - KEYCLOAK_USER=admin
+        - KC_DB=postgres
+        - KC_DB_URL=jdbc:postgresql://keycloak-postgres:5432/keycloak
+        - KC_DB_USERNAME=keycloak
+        - KC_HOSTNAME=sso.openorg.software
+        - KEYCLOAK_ADMIN=admin
       depends_on:
-        - db
+        - keycloak-postgres
       networks:
         - proxy
         - keycloak
