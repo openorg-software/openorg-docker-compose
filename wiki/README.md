@@ -1,6 +1,6 @@
 # wiki.js
 
-## Authorization in wiki.js:
+# SSO Authorization & Authentication in wiki.js:
 
 Add groups
 - `keycloak-access-group`
@@ -26,3 +26,11 @@ Add groups
 - Logout Endpoint: `https://sso.openorg.software/realms/openorg/protocol/openid-connect/logout`
 - Allow self-registration
   - Assign to group: generic access group defined above
+
+
+# Rendering via kroki
+
+Settings -> Rendering -> Kroki
+  - Kroki Server: `https://kroki.openorg.software`
+  - Open Marker: ` ```kroki `
+  - Close Marker: ` ``` `
