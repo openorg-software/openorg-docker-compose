@@ -4,12 +4,20 @@ services:
     image: yuzutech/kroki
     container_name: kroki
     restart: unless-stopped
-    ports:
-      - "8000:8000"
+    environment:
+      - VIRTUAL_HOST=kroki.openorg.software
+      - LETSENCRYPT_HOST=kroki.openorg.software
+      - VIRTUAL_PATH=/
+      - VIRTUAL_PORT=8000
     networks:
       - kroki
       - appwrite_runtimes
+      - proxy
 
 networks:
+  kroki:
+    external: true
   appwrite_runtimes:
+    external: true
+  proxy:
     external: true
