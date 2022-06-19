@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  website:
+    image: flashspys/nginx-static
+    container_name: dashboard
+    volumes:
+      - ./dashboard:/static:ro
+    environment:
+      - VIRTUAL_HOST=openorg.software
+      - LETSENCRYPT_HOST=openorg.software
+      - VIRTUAL_PATH=/
+      - VIRTUAL_PORT=80
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
