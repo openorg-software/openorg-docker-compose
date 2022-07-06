@@ -9,8 +9,8 @@ services:
       - GITEA__database__HOST=db:5432
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
-      - VIRTUAL_HOST=gitea.openorg.software
-      - LETSENCRYPT_HOST=gitea.openorg.software
+      - VIRTUAL_HOST=git.openorg.software
+      - LETSENCRYPT_HOST=git.openorg.software
       - VIRTUAL_PORT=3000
     env_file:
       - .env
@@ -26,6 +26,7 @@ services:
       - db
     networks:
       - gitea
+      - proxy
 
   db:
     image: postgres:9.6
