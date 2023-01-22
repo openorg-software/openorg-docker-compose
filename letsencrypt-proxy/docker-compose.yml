@@ -10,7 +10,7 @@ services:
       - ./nginx/certs:/etc/nginx/certs
       - ./nginx/vhost.d:/etc/nginx/vhost.d
       - ./nginx/html:/usr/share/nginx/html
-      - ./nginx/conf:/etc/nginx/conf.d/
+      - ./nginx/conf.d:/etc/nginx/conf.d/
       - /var/run/docker.sock:/tmp/docker.sock:ro
     restart: always
     networks:
