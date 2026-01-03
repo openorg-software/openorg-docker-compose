@@ -20,7 +20,7 @@ services:
     container_name: nextcloud
     restart: unless-stopped
     volumes:
-      - nextcloud:/var/www/html
+      - ./data/nextcloud:/var/www/html
       - ./data/config:/var/www/html/config
       - type: bind
         source: ./config/nextcloud-custom.ini
